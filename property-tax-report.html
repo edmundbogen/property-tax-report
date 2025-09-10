@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding Your Property Tax Reality in South Florida</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3e8f0 100%);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #003d82 0%, #0056b3 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 61, 130, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .section {
+            background: white;
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 61, 130, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 61, 130, 0.15);
+        }
+
+        h2 {
+            color: #003d82;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #0056b3;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #0056b3;
+            font-size: 1.6em;
+            margin: 25px 0 15px;
+        }
+
+        .key-stat {
+            background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+            border-left: 4px solid #0056b3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .key-stat:hover {
+            background: linear-gradient(135deg, #cce5ff 0%, #b3d9ff 100%);
+            transform: translateX(5px);
+        }
+
+        .key-stat h4 {
+            color: #003d82;
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .key-stat .value {
+            font-size: 2em;
+            color: #0056b3;
+            font-weight: bold;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8fbff;
+            border-radius: 12px;
+            box-shadow: inset 0 2px 5px rgba(0, 61, 130, 0.05);
+        }
+
+        .interactive-calculator {
+            background: linear-gradient(135deg, #003d82 0%, #0056b3 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+
+        .calculator-input {
+            margin: 20px 0;
+        }
+
+        .calculator-input label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .calculator-input input, .calculator-input select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            border: none;
+            font-size: 1.1em;
+        }
+
+        .calculator-result {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .comparison-card {
+            background: linear-gradient(135deg, #f0f8ff 0%, #e6f2ff 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-top: 4px solid #0056b3;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 61, 130, 0.15);
+        }
+
+        .comparison-card h4 {
+            color: #003d82;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .comparison-value {
+            font-size: 2.5em;
+            color: #0056b3;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .subsidy-indicator {
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .subsidy-positive {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .subsidy-negative {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .timeline-year {
+            background: #003d82;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            min-width: 80px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .timeline-content {
+            margin-left: 30px;
+            flex: 1;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 2px dotted #0056b3;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 250px;
+            background-color: #003d82;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -125px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 61, 130, 0.3);
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 61, 130, 0.4);
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Understanding Your Property Tax Reality in South Florida</h1>
+        <p>An Interactive Analysis of Palm Beach County's Two-Tier Tax System and Its Impact on Luxury Homeowners</p>
+    </div>
+
+    <div class="container">
+        <!-- Executive Summary -->
+        <div class="section fade-in">
+            <h2>Executive Summary</h2>
+            <p style="font-size: 1.1em; line-height: 1.8;">As a luxury real estate professional in Palm Beach County, understanding the property tax landscape is crucial for advising high-net-worth clients. This interactive report reveals how Florida's tax system has created dramatic disparities between long-time residents and new buyers, with implications that can mean tens of thousands of dollars annually for your clients.</p>
+            
+            <div class="comparison-grid">
+                <div class="key-stat">
+                    <h4>Tax Revenue Growth Since 2012</h4>
+                    <div class="value">+135.6%</div>
+                    <p>From $854M to $2.01B</p>
+                </div>
+                <div class="key-stat">
+                    <h4>Millage Rate Change</h4>
+                    <div class="value">-5.9%</div>
+                    <p>From 4.78 to 4.50 mills</p>
+                </div>
+                <div class="key-stat">
+                    <h4>New Buyer Premium</h4>
+                    <div class="value">+60%</div>
+                    <p>vs. Long-time Owners</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Property Tax Growth Chart -->
+        <div class="section fade-in">
+            <h2>The 135% Revenue Surge: A Visual Journey</h2>
+            <p>Despite millage rates declining, property tax collections have more than doubled since 2012. This interactive chart shows the dramatic growth trajectory.</p>
+            
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2012</div>
+                    <div class="timeline-content">
+                        <strong>$853.8M collected</strong> - Post-recession recovery begins
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2016</div>
+                    <div class="timeline-content">
+                        <strong>$1.03B milestone</strong> - First time exceeding $1 billion
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2023</div>
+                    <div class="timeline-content">
+                        <strong>13.5% jump</strong> - Largest single-year increase ($1.67B)
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-year">2025</div>
+                    <div class="timeline-content">
+                        <strong>$2.01B projected</strong> - 135.6% growth from 2012
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Tax Calculator -->
+        <div class="section fade-in">
+            <h2>Calculate Your Property Tax Reality</h2>
+            
+            <div class="interactive-calculator">
+                <h3 style="color: white; margin-bottom: 20px;">Property Tax Comparison Calculator</h3>
+                
+                <div class="calculator-input">
+                    <label for="homeValue">Current Market Value of Property:</label>
+                    <input type="number" id="homeValue" value="3000000" min="100000" step="100000">
+                </div>
+                
+                <div class="calculator-input">
+                    <label for="purchaseYear">Year of Purchase:</label>
+                    <select id="purchaseYear">
+                        <option value="2025">2025 (New Buyer)</option>
+                        <option value="2020">2020</option>
+                        <option value="2015">2015</option>
+                        <option value="2012">2012</option>
+                        <option value="2010">2010 or Earlier</option>
+                    </select>
+                </div>
+                
+                <button class="action-button" onclick="calculateTax()" style="margin-top: 20px;">Calculate Tax Comparison</button>
+                
+                <div class="calculator-result" id="calculatorResult">
+                    <h4>Your Estimated Annual Property Tax</h4>
+                    <div style="font-size: 2em; margin: 15px 0;" id="taxAmount">$56,700</div>
+                    <p id="comparisonText">A new buyer pays approximately $21,500 more annually than a long-time owner for the same property.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Two-Tier System -->
+        <div class="section fade-in">
+            <h2>The Two-Tier Tax System Explained</h2>
+            
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>Long-Time Homesteaded Owner</h4>
+                    <p style="color: #666; margin-bottom: 15px;">Owned Since 2012</p>
+                    <div class="comparison-value">$35,200</div>
+                    <p>Annual Tax on $3M Home</p>
+                    <div class="key-stat" style="margin-top: 20px; background: white;">
+                        <p><strong>Effective Rate:</strong> 1.17%</p>
+                        <p><strong>Protected by:</strong> 3% Annual Cap</p>
+                    </div>
+                    <span class="subsidy-indicator subsidy-positive">Saves $21,500/year</span>
+                </div>
+                
+                <div class="comparison-card">
+                    <h4>New Buyer (2025)</h4>
+                    <p style="color: #666; margin-bottom: 15px;">Just Purchased</p>
+                    <div class="comparison-value">$56,700</div>
+                    <p>Annual Tax on $3M Home</p>
+                    <div class="key-stat" style="margin-top: 20px; background: white;">
+                        <p><strong>Effective Rate:</strong> 1.89%</p>
+                        <p><strong>Assessment:</strong> Full Market Value</p>
+                    </div>
+                    <span class="subsidy-indicator subsidy-negative">Pays Extra $21,500/year</span>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- St. Andrews Case Study -->
+        <div class="section fade-in">
+            <h2>Real-World Example: St. Andrews Country Club</h2>
+            
+            <p style="font-size: 1.1em; margin-bottom: 25px;">Let's examine how two neighbors in the same community can have vastly different tax bills for identical properties.</p>
+            
+            <div style="background: linear-gradient(135deg, #f8fbff 0%, #e6f2ff 100%); padding: 30px; border-radius: 12px; margin: 20px 0;">
+                <h3 style="color: #003d82;">The $3 Million Property Paradox</h3>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px;">
+                    <div>
+                        <h4 style="color: #0056b3;">Neighbor A: The Pioneer</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin: 10px 0;">✓ Purchased in 2012 for $1.2M</li>
+                            <li style="margin: 10px 0;">✓ Current value: $3M</li>
+                            <li style="margin: 10px 0;">✓ Protected by Save Our Homes</li>
+                            <li style="margin: 10px 0;">✓ Annual tax: <strong style="color: #28a745;">$35,200</strong></li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 style="color: #0056b3;">Neighbor B: The Newcomer</h4>
+                        <ul style="list-style: none; padding: 0;">
+                            <li style="margin: 10px 0;">✓ Purchased in 2025 for $3M</li>
+                            <li style="margin: 10px 0;">✓ Current value: $3M</li>
+                            <li style="margin: 10px 0;">✓ Assessed at full market value</li>
+                            <li style="margin: 10px 0;">✓ Annual tax: <strong style="color: #dc3545;">$56,700</strong></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; padding: 20px; background: white; border-radius: 8px;">
+                    <p style="font-size: 1.3em; color: #003d82; margin: 0;">Same Street. Same View. Same Services.</p>
+                    <p style="font-size: 2em; color: #0056b3; font-weight: bold; margin: 10px 0;">60% Different Tax Bills</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Strategic Insights -->
+        <div class="section fade-in">
+            <h2>Strategic Insights for Luxury Homeowners</h2>
+            
+            <h3>1. Budget for Full Assessment</h3>
+            <div class="key-stat">
+                <p>New buyers should expect to pay approximately <strong>1.89%</strong> of purchase price annually. On a $5M property, that's <strong>$94,500 per year</strong> - budget accordingly.</p>
+            </div>
+            
+            <h3>2. Maximize Homestead Benefits</h3>
+            <div class="key-stat">
+                <p>File for homestead by <strong>March 1st</strong> following purchase. This saves the first $50,000 from taxation and locks in the 3% annual cap.</p>
+            </div>
+            
+            <h3>3. Leverage Portability</h3>
+            <div class="key-stat">
+                <p>Transfer up to <strong>$500,000</strong> of SOH savings when upsizing, or <strong>100%</strong> when downsizing within Florida.</p>
+            </div>
+            
+            <h3>4. Consider Timing</h3>
+            <div class="key-stat">
+                <p>Properties purchased early in the year benefit from a full year of homestead protection. December purchases face full assessment for the following year.</p>
+            </div>
+        </div>
+
+        <!-- Market Context -->
+        <div class="section fade-in">
+            <h2>Understanding the Market Forces</h2>
+            
+            <div class="chart-container">
+                <canvas id="driversChart"></canvas>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h3>Key Market Drivers</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-year" style="background: #28a745;">62%</div>
+                        <div class="timeline-content">
+                            <strong>Assessed Value Growth</strong> - From $209B (2020) to $341B (2025)
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year" style="background: #17a2b8;">$5B+</div>
+                        <div class="timeline-content">
+                            <strong>New Construction Annually</strong> - Adding to tax base at full value
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-year" style="background: #ffc107;">12.6%</div>
+                        <div class="timeline-content">
+                            <strong>Population Growth</strong> - Increasing demand and values
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="section fade-in" style="background: linear-gradient(135deg, #003d82 0%, #0056b3 100%); color: white;">
+            <h2 style="color: white; border-bottom-color: white;">Your Next Steps</h2>
+            
+            <div style="font-size: 1.2em; line-height: 1.8; margin: 20px 0;">
+                <p>Understanding property taxes is crucial for making informed real estate decisions in Palm Beach County. Whether you're a long-time resident considering a move or a new buyer entering the market, these disparities can significantly impact your financial planning.</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
+                    <h4 style="color: white; margin-bottom: 10px;">For Buyers</h4>
+                    <p>Budget 1.89% of purchase price for annual taxes and file for homestead immediately.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
+                    <h4 style="color: white; margin-bottom: 10px;">For Sellers</h4>
+                    <p>Highlight portability benefits and help buyers understand true carrying costs.</p>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
+                    <h4 style="color: white; margin-bottom: 10px;">For Investors</h4>
+                    <p>Factor in 10% annual assessment increases for non-homesteaded properties.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Disclaimer -->
+        <div class="section">
+            <div class="disclaimer">
+                <strong>Important Note:</strong> This report provides general information about property taxes in Palm Beach County. Actual tax calculations depend on numerous factors including specific location, exemptions, and special assessments. Consult with a tax professional and the Palm Beach County Property Appraiser for precise calculations for any specific property.
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <p style="font-size: 1.1em; color: #666;">Prepared by Edmund Bogen Team | Douglas Elliman Real Estate</p>
+                <p style="color: #999;">Data Sources: Palm Beach County Budget Documents, Florida Department of Revenue, WLRN Public Media</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize charts when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createRevenueChart();
+            createComparisonChart();
+            createDriversChart();
+            setupScrollAnimations();
+        });
+
+        // Revenue Growth Chart
+        function createRevenueChart() {
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025'],
+                    datasets: [{
+                        label: 'Property Tax Revenue (Billions)',
+                        data: [0.854, 0.860, 0.891, 0.954, 1.034, 1.115, 1.191, 1.261, 1.328, 1.395, 1.474, 1.673, 1.834, 2.012],
+                        borderColor: '#0056b3',
+                        backgroundColor: 'rgba(0, 86, 179, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#003d82',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Palm Beach County Property Tax Collections (FY 2012-2025)',
+                            font: { size: 16, weight: 'bold' },
+                            color: '#003d82'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y.toFixed(2) + ' Billion';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + value.toFixed(1) + 'B';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 86, 179, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                color: 'rgba(0, 86, 179, 0.05)'
+                            }
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+        }
+
+        // Comparison Chart
+        function createComparisonChart() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['2012 Buyer', '2015 Buyer', '2020 Buyer', '2025 Buyer'],
+                    datasets: [{
+                        label: 'Annual Tax on $3M Property',
+                        data: [35200, 42000, 48500, 56700],
+                        backgroundColor: [
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(255, 193, 7, 0.8)',
+                            'rgba(255, 140, 0, 0.8)',
+                            'rgba(220, 53, 69, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(40, 167, 69, 1)',
+                            'rgba(255, 193, 7, 1)',
+                            'rgba(255, 140, 0, 1)',
+                            'rgba(220, 53, 69, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Tax Burden by Purchase Year (Same $3M Property)',
+                            font: { size: 16, weight: 'bold' },
+                            color: '#003d82'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '$' + context.parsed.y.toLocaleString() + ' per year';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '$' + (value/1000).toFixed(0) + 'K';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0, 86, 179, 0.1)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutBounce'
+                    }
+                }
+            });
+        }
+
+        // Market Drivers Chart
+        function createDriversChart() {
+            const ctx = document.getElementById('driversChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Property Appreciation', 'New Construction', 'Turnover/Resets', 'Population Growth'],
+                    datasets: [{
+                        data: [45, 25, 20, 10],
+                        backgroundColor: [
+                            'rgba(0, 61, 130, 0.9)',
+                            'rgba(0, 86, 179, 0.9)',
+                            'rgba(0, 123, 255, 0.9)',
+                            'rgba(102, 178, 255, 0.9)'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Drivers of Tax Revenue Growth',
+                            font: { size: 16, weight: 'bold' },
+                            color: '#003d82'
+                        },
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 15,
+                                font: { size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.parsed + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: false
+                    }
+                }
+            });
+        }
+
+        // Tax Calculator Function
+        function calculateTax() {
+            const homeValue = parseFloat(document.getElementById('homeValue').value);
+            const purchaseYear = document.getElementById('purchaseYear').value;
+            
+            let effectiveRate, annualTax, comparison;
+            
+            switch(purchaseYear) {
+                case '2025':
+                    effectiveRate = 0.0189;
+                    comparison = "As a new buyer, you pay the full market rate with no protection from Save Our Homes.";
+                    break;
+                case '2020':
+                    effectiveRate = 0.0162;
+                    comparison = "With 5 years of SOH protection, you save approximately $8,100 annually compared to new buyers.";
+                    break;
+                case '2015':
+                    effectiveRate = 0.0140;
+                    comparison = "With 10 years of SOH protection, you save approximately $14,700 annually compared to new buyers.";
+                    break;
+                case '2012':
+                    effectiveRate = 0.0117;
+                    comparison = "With 13 years of SOH protection, you save approximately $21,600 annually compared to new buyers.";
+                    break;
+                case '2010':
+                    effectiveRate = 0.0095;
+                    comparison = "With 15+ years of SOH protection, you save approximately $28,500 annually compared to new buyers.";
+                    break;
+            }
+            
+            annualTax = homeValue * effectiveRate;
+            
+            document.getElementById('taxAmount').innerHTML = '$' + annualTax.toLocaleString('en-US', {maximumFractionDigits: 0});
+            document.getElementById('comparisonText').innerHTML = comparison;
+        }
+
+        // Scroll Animations
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+    </script>
+</body>
+</html>
