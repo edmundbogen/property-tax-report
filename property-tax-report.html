@@ -265,13 +265,15 @@
         .action-button {
             background: linear-gradient(135deg, #0056b3 0%, #003d82 100%);
             color: white;
-            padding: 15px 30px;
-            border: none;
+            padding: 18px 45px;
+            border: 2px solid #003d82;
             border-radius: 8px;
-            font-size: 1.1em;
+            font-size: 1.3em;
+            font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 61, 130, 0.3);
+            display: inline-block;
         }
 
         .action-button:hover {
@@ -280,12 +282,15 @@
         }
 
         .disclaimer {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
+            background: #e8f4ff;
+            border-left: 4px solid #0056b3;
+            padding: 20px;
             margin: 20px 0;
             border-radius: 6px;
-            font-style: italic;
+            font-style: normal;
+            color: #003d82;
+            font-weight: 500;
+            box-shadow: 0 2px 8px rgba(0, 86, 179, 0.1);
         }
 
         @media (max-width: 768px) {
@@ -432,7 +437,9 @@
                     </div>
                 </div>
                 
-                <button class="action-button" onclick="calculateFloridaTax()" style="margin-top: 20px;">Calculate Property Tax</button>
+                <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+                    <button class="action-button" onclick="calculateFloridaTax()">📊 Calculate My Property Tax</button>
+                </div>
                 
                 <div class="calculator-result" id="calculatorResult">
                     <h4>Your Property Tax Analysis for 2025</h4>
