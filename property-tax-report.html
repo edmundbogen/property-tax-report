@@ -449,7 +449,7 @@
                     <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin-top: 20px;">
                         <p style="margin-bottom: 10px;"><strong>Assessment Details:</strong></p>
                         <p id="assessedValue">Assessed Value: $3,000,000</p>
-                        <p id="homesteadSavings">Homestead Exemption: -$75,722</p>
+                        <p id="homesteadSavings">Homestead Exemption: -$50,722</p>
                         <p id="taxableValue">Taxable Value: $2,924,278</p>
                         <p id="sohSavings" style="color: #4CAF50; margin-top: 10px;">Save Our Homes Benefit: $0 (builds over time)</p>
                     </div>
@@ -468,7 +468,7 @@
                 <div class="comparison-card">
                     <h4>Long-Time Homesteaded Owner</h4>
                     <p style="color: #666; margin-bottom: 15px;">Owned Since 2012</p>
-                    <div class="comparison-value">$26,900</div>
+                    <div class="comparison-value">$27,350</div>
                     <p>Annual Tax on $3M Home</p>
                     <div class="key-stat" style="margin-top: 20px; background: white;">
                         <p><strong>Effective Rate:</strong> 0.90%</p>
@@ -480,7 +480,7 @@
                 <div class="comparison-card">
                     <h4>New Buyer (2025)</h4>
                     <p style="color: #666; margin-bottom: 15px;">Just Purchased</p>
-                    <div class="comparison-value">$52,600</div>
+                    <div class="comparison-value">$53,087</div>
                     <p>Annual Tax on $3M Home</p>
                     <div class="key-stat" style="margin-top: 20px; background: white;">
                         <p><strong>Effective Rate:</strong> 1.75%</p>
@@ -511,7 +511,7 @@
                             <li style="margin: 10px 0;">✓ Purchased in 2012 for $1.2M</li>
                             <li style="margin: 10px 0;">✓ Current value: $3M</li>
                             <li style="margin: 10px 0;">✓ Protected by Save Our Homes</li>
-                            <li style="margin: 10px 0;">✓ Annual tax: <strong style="color: #28a745;">$26,900</strong></li>
+                            <li style="margin: 10px 0;">✓ Annual tax: <strong style="color: #28a745;">$27,350</strong></li>
                         </ul>
                     </div>
                     
@@ -521,7 +521,7 @@
                             <li style="margin: 10px 0;">✓ Purchased in 2025 for $3M</li>
                             <li style="margin: 10px 0;">✓ Current value: $3M</li>
                             <li style="margin: 10px 0;">✓ Assessed at full market value</li>
-                            <li style="margin: 10px 0;">✓ Annual tax: <strong style="color: #dc3545;">$52,637</strong></li>
+                            <li style="margin: 10px 0;">✓ Annual tax: <strong style="color: #dc3545;">$53,087</strong></li>
                         </ul>
                     </div>
                 </div>
@@ -539,12 +539,12 @@
             
             <h3>1. Budget for Full Assessment</h3>
             <div class="key-stat">
-                <p>New buyers with homestead should expect effective rates around <strong>1.7-1.8%</strong> of purchase price. On a $5M property with homestead, that's approximately <strong>$88,000 per year</strong> at 18 mills.</p>
+                <p>New buyers with homestead should expect effective rates around <strong>1.75-1.8%</strong> of purchase price. On a $5M property with homestead, that's approximately <strong>$89,000 per year</strong> at 18 mills.</p>
             </div>
             
             <h3>2. Maximize Homestead Benefits</h3>
             <div class="key-stat">
-                <p>File for homestead by <strong>March 1st</strong> following purchase. This provides up to $75,722 in exemptions (2025) and locks in the SOH cap (2.9% for 2025).</p>
+                <p>File for homestead by <strong>March 1st</strong> following purchase. This provides up to $50,722 in exemptions (2025) and locks in the SOH cap (2.9% for 2025).</p>
             </div>
             
             <h3>3. Leverage Portability</h3>
@@ -739,7 +739,7 @@
                     labels: ['2012 Buyer', '2015 Buyer', '2020 Buyer', '2025 Buyer'],
                     datasets: [{
                         label: 'Annual Tax on $3M Property (with Homestead)',
-                        data: [26900, 35400, 43800, 52637],
+                        data: [27350, 36000, 44500, 53087],
                         backgroundColor: [
                             'rgba(40, 167, 69, 0.8)',
                             'rgba(255, 193, 7, 0.8)',
@@ -879,8 +879,8 @@
         // Get homestead exemption amount by year
         function getHomesteadExemption(year) {
             const exemptions = {
-                2025: 75722,
-                2024: 75000,
+                2025: 50722,
+                2024: 50000,
                 2023: 74000,
                 2022: 73000,
                 2021: 71000,
@@ -896,7 +896,7 @@
                 2011: 61000,
                 2010: 60000
             };
-            return exemptions[year] || 75722;
+            return exemptions[year] || 50722;
         }
         
         // Calculate assessed value with SOH cap
